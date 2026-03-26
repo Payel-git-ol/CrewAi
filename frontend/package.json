@@ -1,0 +1,37 @@
+{
+  "name": "crewai-frontend",
+  "version": "1.0.0",
+  "description": "CrewAI - Visual Agent Management Platform",
+  "scripts": {
+    "dev": "parcel src/index.html --port 3000 --open",
+    "build": "parcel build src/index.html --dist-dir dist",
+    "lint": "eslint src/**/*.ts --fix",
+    "format": "prettier --write \"src/**/*.{ts,js,json,css,md}\"",
+    "clean": "rm -rf dist .parcel-cache"
+  },
+  "keywords": [
+    "crewai",
+    "agents",
+    "visual-editor",
+    "node-editor"
+  ],
+  "author": "CrewAI Team",
+  "license": "MIT",
+  "type": "module",
+  "targets": {
+    "default": {
+      "source": "src/index.html",
+      "distDir": "dist",
+      "publicUrl": "./"
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
+    "parcel": "^2.16.4",
+    "prettier": "^3.8.1",
+    "typescript": "^6.0.2"
+  }
+}
