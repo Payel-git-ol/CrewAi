@@ -85,8 +85,8 @@ services:
 
   agents:
     build:
-      context: .
-      dockerfile: ./agents/Dockerfile
+      context: ./agents
+      dockerfile: Dockerfile
     container_name: crewai-agents
     environment:
       - AGENTS_PORT=50053

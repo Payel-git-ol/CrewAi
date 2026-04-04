@@ -5,14 +5,14 @@ import (
 	"os"
 	"sync"
 
-	"agents/pkg/fetcher/grpc"
 	"worker/internal/fetcher/grpc/workerpb"
+	"worker/internal/service/agents"
 )
 
 // WorkerService — worker service
 type WorkerService struct {
 	workerpb.UnimplementedWorkerServiceServer
-	agentsClient *grpc.AgentClient
+	agentsClient *agents.AgentClientWrapper
 	mu           sync.Mutex
 }
 
@@ -22,7 +22,7 @@ func NewWorkerService() *WorkerService {
 		agentsHost = "localhost:50053"
 	}
 
-	agentsClient, err := grpc.NewAgentClient(agentsHost)
+	agentsClient, err := agents.NewAgentClientWrapper()
 	if err != nil {
 		log.Printf("Warning: failed to connect to agents service: %v", err)
 	}

@@ -1,0 +1,402 @@
+time="2026-04-04T20:25:40+04:00" level=warning msg="c:\\Users\\glino\\OneDrive\\Рабочий стол\\GrewAI\\CrewAi\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+#1 [internal] load local bake definitions
+#1 reading from stdin 3.15kB 0.4s done
+#1 DONE 0.5s
+
+#2 [boss internal] load build definition from Dockerfile
+#2 transferring dockerfile:
+#2 transferring dockerfile: 901B 0.2s done
+#2 ...
+
+#3 [merger internal] load build definition from Dockerfile
+#3 transferring dockerfile: 353B 0.1s done
+#3 DONE 1.4s
+
+#4 [agents internal] load build definition from Dockerfile
+#4 transferring dockerfile: 710B 0.1s done
+#4 DONE 1.4s
+
+#2 [boss internal] load build definition from Dockerfile
+#2 DONE 1.5s
+
+#5 [apigateway internal] load build definition from Dockerfile
+#5 transferring dockerfile: 514B 0.2s done
+#5 DONE 1.6s
+
+#6 [boss internal] load metadata for docker.io/library/golang:1.25-alpine
+#6 ...
+
+#7 [manager internal] load build definition from Dockerfile
+#7 transferring dockerfile: 619B 0.1s done
+#7 DONE 1.7s
+
+#6 [manager internal] load metadata for docker.io/library/golang:1.25-alpine
+#6 ...
+
+#8 [auth] library/golang:pull token for registry-1.docker.io
+#8 DONE 0.0s
+
+#9 [auth] library/alpine:pull token for registry-1.docker.io
+#9 DONE 0.0s
+
+#10 [auth] library/python:pull token for registry-1.docker.io
+#10 DONE 0.0s
+
+#11 [worker internal] load build definition from Dockerfile
+#11 transferring dockerfile: 617B 0.2s done
+#11 DONE 2.5s
+
+#12 [manager internal] load metadata for docker.io/library/alpine:latest
+#12 ...
+
+#13 [agents internal] load metadata for docker.io/library/python:3.12-slim
+#13 DONE 5.3s
+
+#6 [worker internal] load metadata for docker.io/library/golang:1.25-alpine
+#6 DONE 5.2s
+
+#12 [apigateway internal] load metadata for docker.io/library/alpine:latest
+#12 DONE 5.3s
+
+#14 [merger internal] load metadata for docker.io/library/golang:1.21-alpine
+#14 DONE 5.4s
+
+#15 [apigateway internal] load .dockerignore
+#15 transferring context: 2B 0.0s done
+#15 ...
+
+#16 [agents internal] load .dockerignore
+#16 transferring context: 2B 0.0s done
+#16 DONE 0.7s
+
+#15 [worker internal] load .dockerignore
+#15 DONE 0.7s
+
+#17 [manager stage-1 1/3] FROM docker.io/library/alpine:latest@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+#17 ...
+
+#18 [agents internal] load build context
+#18 DONE 0.0s
+
+#19 [merger internal] load build context
+#19 DONE 0.0s
+
+#20 [boss internal] load build context
+#20 DONE 0.0s
+
+#17 [apigateway stage-1 1/3] FROM docker.io/library/alpine:latest@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+#17 resolve docker.io/library/alpine:latest@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+#17 ...
+
+#21 [apigateway internal] load build context
+#21 DONE 0.0s
+
+#17 [worker stage-1 1/3] FROM docker.io/library/alpine:latest@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+#17 ...
+
+#20 [worker internal] load build context
+#20 DONE 0.0s
+
+#22 [worker builder  1/12] FROM docker.io/library/golang:1.25-alpine@sha256:8e02eb337d9e0ea459e041f1ee5eece41cbb61f1d83e7d883a3e2fb4862063fa
+#22 resolve docker.io/library/golang:1.25-alpine@sha256:8e02eb337d9e0ea459e041f1ee5eece41cbb61f1d83e7d883a3e2fb4862063fa
+#22 ...
+
+#23 [agents 1/7] FROM docker.io/library/python:3.12-slim@sha256:3d5ed973e45820f5ba5e46bd065bd88b3a504ff0724d85980dcd05eab361fcf4
+#23 resolve docker.io/library/python:3.12-slim@sha256:3d5ed973e45820f5ba5e46bd065bd88b3a504ff0724d85980dcd05eab361fcf4 1.0s done
+#23 DONE 1.1s
+
+#17 [worker stage-1 1/3] FROM docker.io/library/alpine:latest@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+#17 resolve docker.io/library/alpine:latest@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659 1.1s done
+#17 resolve docker.io/library/alpine:latest@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659 1.1s done
+#17 DONE 1.2s
+
+#24 [merger builder 1/6] FROM docker.io/library/golang:1.21-alpine@sha256:2414035b086e3c42b99654c8b26e6f5b1b1598080d65fd03c7f499552ff4dc94
+#24 resolve docker.io/library/golang:1.21-alpine@sha256:2414035b086e3c42b99654c8b26e6f5b1b1598080d65fd03c7f499552ff4dc94 1.1s done
+#24 DONE 1.2s
+
+#22 [boss builder  1/12] FROM docker.io/library/golang:1.25-alpine@sha256:8e02eb337d9e0ea459e041f1ee5eece41cbb61f1d83e7d883a3e2fb4862063fa
+#22 resolve docker.io/library/golang:1.25-alpine@sha256:8e02eb337d9e0ea459e041f1ee5eece41cbb61f1d83e7d883a3e2fb4862063fa 1.1s done
+#22 DONE 1.2s
+
+#19 [merger internal] load build context
+#19 ...
+
+#18 [agents internal] load build context
+#18 transferring context: 2.53kB 0.5s done
+#18 DONE 1.1s
+
+#25 [agents 5/7] RUN pip install --no-cache-dir -r requirements.txt
+#25 CACHED
+
+#26 [agents 2/7] WORKDIR /app
+#26 CACHED
+
+#27 [agents 4/7] COPY requirements.txt .
+#27 CACHED
+
+#28 [agents 6/7] COPY . .
+#28 CACHED
+
+#29 [agents 3/7] RUN apt-get update &&     apt-get install -y --no-install-recommends     gcc     && rm -rf /var/lib/apt/lists/*
+#29 CACHED
+
+#30 [agents 7/7] RUN mkdir -p logs
+#30 CACHED
+
+#20 [worker internal] load build context
+#20 ...
+
+#19 [merger internal] load build context
+#19 transferring context: 6.14kB 0.6s done
+#19 DONE 1.6s
+
+#20 [worker internal] load build context
+#20 ...
+
+#31 [merger stage-1 2/3] WORKDIR /app
+#31 CACHED
+
+#32 [merger builder 2/6] WORKDIR /app/merger
+#32 CACHED
+
+#33 [merger builder 3/6] COPY merger/go.mod merger/go.sum ./
+#33 CACHED
+
+#34 [merger builder 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /merger ./cmd/app/main.go
+#34 CACHED
+
+#35 [merger builder 4/6] RUN go mod download
+#35 CACHED
+
+#36 [merger builder 5/6] COPY merger/ .
+#36 CACHED
+
+#37 [merger stage-1 3/3] COPY --from=builder /merger .
+#37 CACHED
+
+#20 [worker internal] load build context
+#20 ...
+
+#21 [apigateway internal] load build context
+#21 transferring context: 1.52kB 1.5s done
+#21 DONE 2.1s
+
+#38 [merger] exporting to image
+#38 exporting layers done
+#38 exporting manifest sha256:bf1bb9fe3badcc702a71684ca771e38657e9b2fa1b6551ccc0ab13962982c69b 0.0s done
+#38 exporting config sha256:6f79d51b4cecded6db0901daef845a9db0fc08d67bdea819d5a63750cb41c353 0.0s done
+#38 exporting attestation manifest sha256:f459fb1c94e9eccad1f4f0ede9341991649d0887540f23198c9b913cd99c3875
+#38 ...
+
+#39 [apigateway builder  3/12] RUN apk add --no-cache git
+#39 CACHED
+
+#40 [apigateway builder 4/6] COPY apigateway ./apigateway
+#40 CACHED
+
+#41 [apigateway builder 5/6] RUN cd apigateway && go mod download
+#41 CACHED
+
+#42 [apigateway stage-1 2/4] WORKDIR /root/
+#42 CACHED
+
+#43 [apigateway stage-1 3/4] RUN apk --no-cache add ca-certificates
+#43 CACHED
+
+#44 [apigateway builder 6/6] RUN cd apigateway && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /workspace/main ./cmd/app
+#44 CACHED
+
+#45 [apigateway builder  2/12] WORKDIR /workspace
+#45 CACHED
+
+#46 [apigateway stage-1 4/4] COPY --from=builder /workspace/main .
+#46 CACHED
+
+#47 [apigateway] exporting to image
+#47 exporting layers done
+#47 exporting manifest sha256:5ac5ee29141d996a4984d2a74406938eb0aa4d3f1512b496a7d05661e5c360d7
+#47 exporting manifest sha256:5ac5ee29141d996a4984d2a74406938eb0aa4d3f1512b496a7d05661e5c360d7 0.1s done
+#47 exporting config sha256:a5e1c49aa41bd881b5dc7a35240ba520b8a05ae014c6ff55dcb0e9a323f28094
+#47 exporting config sha256:a5e1c49aa41bd881b5dc7a35240ba520b8a05ae014c6ff55dcb0e9a323f28094 0.2s done
+#47 exporting attestation manifest sha256:63b2196f02b911585e9573a17d2033cac93c33b1a0b21c0ea85f5ee04311b69e
+#47 ...
+
+#48 [agents] exporting to image
+#48 exporting layers 0.1s done
+#48 exporting manifest sha256:7bd9e70df1fecd45d1d7b04e5826ec964753ed573a9836c9e30f37d19490d8f5 done
+#48 exporting config sha256:79345d0111f51a2306fea7fb4a341c0d290c81aeb0674242d25665d1906ec8ee 0.0s done
+#48 exporting attestation manifest sha256:5e63724e61633c886ebdb5dd34af500e410077e90c1fa677d11fbefd2b77b0e3 1.8s done
+#48 exporting manifest list sha256:5469351c61c02735b7304c33a237757b363ef42a96977a1e7c0122dd5034e3ae 0.4s done
+#48 naming to docker.io/library/crewai-agents:latest 0.1s done
+#48 unpacking to docker.io/library/crewai-agents:latest 0.1s done
+#48 DONE 3.0s
+
+#20 [worker internal] load build context
+#20 ...
+
+#38 [merger] exporting to image
+#38 exporting attestation manifest sha256:f459fb1c94e9eccad1f4f0ede9341991649d0887540f23198c9b913cd99c3875 1.2s done
+#38 exporting manifest list sha256:29c4258c1647e36eff15cbae0a4faff9d734cdc651dd6b9092d137c5e2823db1 0.3s done
+#38 naming to docker.io/library/crewai-merger:latest 0.1s done
+#38 unpacking to docker.io/library/crewai-merger:latest 0.2s done
+#38 DONE 3.0s
+
+#20 [worker internal] load build context
+#20 transferring context: 3.53MB 6.6s
+#20 ...
+
+#47 [apigateway] exporting to image
+#47 exporting attestation manifest sha256:63b2196f02b911585e9573a17d2033cac93c33b1a0b21c0ea85f5ee04311b69e 0.5s done
+#47 exporting manifest list sha256:132c835057f1ee5f8f216b972ce9f2ea60c1422835d45f2ae63e652bc132a059 0.5s done
+#47 naming to docker.io/library/crewai-apigateway:latest 0.3s done
+#47 unpacking to docker.io/library/crewai-apigateway:latest 1.6s done
+#47 DONE 4.1s
+
+#20 [worker internal] load build context
+#20 ...
+
+#49 [merger] resolving provenance for metadata file
+#49 DONE 1.6s
+
+#20 [worker internal] load build context
+#20 ...
+
+#50 [apigateway] resolving provenance for metadata file
+#50 DONE 0.5s
+
+#51 [agents] resolving provenance for metadata file
+#51 DONE 1.9s
+
+#20 [worker internal] load build context
+#20 transferring context: 8.70MB 11.9s
+#20 transferring context: 23.42MB 16.9s
+#20 transferring context: 36.00MB 22.0s
+#20 transferring context: 43.28MB 27.1s
+#20 transferring context: 49.97MB 32.1s
+#20 transferring context: 67.15MB 36.5s done
+#20 transferring context: 67.15MB 36.5s done
+#20 DONE 36.9s
+
+#52 [worker builder 11/12] RUN cd worker && go mod download
+#52 CACHED
+
+#53 [manager builder  6/12] COPY apigateway ./apigateway
+#53 CACHED
+
+#54 [manager builder  4/12] COPY go.work ./
+#54 CACHED
+
+#55 [manager builder  5/12] COPY agents ./agents
+#55 CACHED
+
+#56 [manager builder  8/12] COPY manager ./manager
+#56 CACHED
+
+#45 [manager builder  2/12] WORKDIR /workspace
+#45 CACHED
+
+#39 [manager builder  3/12] RUN apk add --no-cache git
+#39 CACHED
+
+#57 [manager builder  9/12] COPY merger ./merger
+#57 CACHED
+
+#58 [manager builder 10/12] COPY worker ./worker
+#58 CACHED
+
+#59 [manager builder  7/12] COPY boss ./boss
+#59 CACHED
+
+#60 [manager builder 11/12] RUN cd manager && go mod download
+#60 CACHED
+
+#61 [boss builder 11/12] RUN cd boss && go mod download
+#61 CACHED
+
+#62 [manager builder 12/12] RUN cd manager && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /workspace/main ./cmd/app
+#62 ...
+
+#63 [boss builder 12/12] RUN cd boss && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /workspace/main ./cmd/app
+#63 ...
+
+#64 [worker builder 12/12] RUN cd worker && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /workspace/main ./cmd/app
+#64 DONE 269.0s
+
+#63 [boss builder 12/12] RUN cd boss && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /workspace/main ./cmd/app
+#63 DONE 269.0s
+
+#62 [manager builder 12/12] RUN cd manager && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /workspace/main ./cmd/app
+#62 DONE 269.0s
+
+#43 [worker stage-1 3/4] RUN apk --no-cache add ca-certificates
+#43 CACHED
+
+#42 [worker stage-1 2/4] WORKDIR /root/
+#42 CACHED
+
+#65 [worker stage-1 4/4] COPY --from=builder /workspace/main .
+#65 CACHED
+
+#66 [boss stage-1 4/4] COPY --from=builder /workspace/main .
+#66 CACHED
+
+#42 [boss stage-1 2/4] WORKDIR /root/
+#42 CACHED
+
+#43 [boss stage-1 3/4] RUN apk --no-cache add ca-certificates
+#43 CACHED
+
+#67 [manager stage-1 4/4] COPY --from=builder /workspace/main .
+#67 CACHED
+
+#68 [boss] exporting to image
+#68 exporting layers done
+#68 exporting manifest sha256:e45a3c9356d72ed0c34a9028ccfe2afd9a5e8e9b07f70bc1c1c0743baa6eef18 0.0s done
+#68 exporting config sha256:ad086e7c2640df40725348753386be11fb5789b9a9c6fcf788e7b07c4390cd30 0.0s done
+#68 exporting attestation manifest sha256:fe3cc5ba4e4024057896663052d10c97069bffc760323c8da4c1c7027a0d69f6
+#68 exporting attestation manifest sha256:fe3cc5ba4e4024057896663052d10c97069bffc760323c8da4c1c7027a0d69f6 2.2s done
+#68 exporting manifest list sha256:41a4958faed7843dc11c976b94ceddfbc8e05f77ee27b82de4d2c9357b5e4ef0
+#68 exporting manifest list sha256:41a4958faed7843dc11c976b94ceddfbc8e05f77ee27b82de4d2c9357b5e4ef0 0.4s done
+#68 naming to docker.io/library/crewai-boss:latest 0.1s done
+#68 unpacking to docker.io/library/crewai-boss:latest
+#68 unpacking to docker.io/library/crewai-boss:latest 0.1s done
+#68 DONE 3.2s
+
+#69 [manager] exporting to image
+#69 exporting layers 0.0s done
+#69 exporting manifest sha256:b211b9269a25b0cc2677750381354efa1c2812cd6c6c7fce14a2fc8b30fda4d8 0.0s done
+#69 exporting config sha256:bb36e321d53fa26e247a2faef4b75a993def9f12f7b484faca52fff77c10cf18 0.0s done
+#69 exporting attestation manifest sha256:fb811100a6646337d380ee6ba0780c45563f8a9b341bd9833fb04b40a3f34a40 2.5s done
+#69 exporting manifest list sha256:164f5ad9ff46e0e4bc24a9688f365ea64b508f0e4d2b6021334e16b036c46745 0.2s done
+#69 naming to docker.io/library/crewai-manager:latest 0.1s done
+#69 unpacking to docker.io/library/crewai-manager:latest
+#69 unpacking to docker.io/library/crewai-manager:latest 0.1s done
+#69 DONE 3.4s
+
+#70 [worker] exporting to image
+#70 exporting layers 0.0s done
+#70 exporting manifest sha256:fda11f66137c38ce15916e083c8ba97052d2a66a765a04d5049f81c0b44ee4e2 0.0s done
+#70 exporting config sha256:c7292192d48949fe295250b04b2f3489abba2c906edf59ee7dad597b8d02223f 0.0s done
+#70 exporting attestation manifest sha256:d68098d21d8cd8b8e8ce653512b7d15b86b575a92ddfbf21c9110d7a734256e9 2.5s done
+#70 exporting manifest list sha256:0a342f858453565564dc1cd018b2168a1b7a4079ebf2dfc5393db419b1327b8f 0.2s done
+#70 naming to docker.io/library/crewai-worker:latest 0.1s done
+#70 unpacking to docker.io/library/crewai-worker:latest 0.1s done
+#70 DONE 3.3s
+
+#71 [boss] resolving provenance for metadata file
+#71 ...
+
+#72 [manager] resolving provenance for metadata file
+#72 DONE 0.2s
+
+#73 [worker] resolving provenance for metadata file
+#73 DONE 0.5s
+
+#71 [boss] resolving provenance for metadata file
+#71 DONE 0.8s
+ crewai-worker  Built
+ crewai-agents  Built
+ crewai-apigateway  Built
+ crewai-boss  Built
+ crewai-manager  Built
+ crewai-merger  Built

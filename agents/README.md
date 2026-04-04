@@ -1,249 +1,242 @@
-# Agents Service
+# Agents Service (Python Version)
 
-Единый интерфейс для работы с различными AI провайдерами через gRPC.
+Единый интерфейс ко всем LLM-провайдерам в системе CrewAI.
 
-## Поддерживаемые провайдеры
+## 📖 Обзор
 
-- ✅ **Claude** (Anthropic)
-- ✅ **Gemini** (Google)
-- ✅ **OpenAI**
-- ✅ **DeepSeek**
-- ✅ **Grok** (xAI)
+Agents Service — это **централизованный маршрутизатор** запросов к ИИ-провайдерам. Вместо того чтобы каждый сервис (Boss, Manager, Worker) самостоятельно подключался к OpenAI, Gemini и другим, они все обращаются к Agents через gRPC.
 
-## Установка
+### Преимущества
 
-### 1. Генерация Proto файлов
+- ✅ **Все провайдеры в одном месте** — легко добавить новый
+- ✅ **Централизованная retry-логика** (особенно для OpenRouter)
+- ✅ **Per-request токены** — API-ключи не хранятся на сервере
+- ✅ **Единый интерфейс** независимо от провайдера
+- ✅ **Асинхронная архитектура** на Python 3.12+
+- ✅ **Lazy client creation** — клиенты создаются только при первом запросе
 
-```powershell
-cd agents
-.\generate-proto.ps1
-```
-
-Это создаст:
-- `pb/agents.pb.go` - Proto structures
-- `pb/agents_grpc.pb.go` - gRPC service code
-
-### 2. Запуск сервиса локально
-
-```powershell
-cd agents
-go run .\cmd\app\main.go
-```
-
-Expected output:
-```
-✅ Available AI providers: [claude gemini openai deepseek grok]
-Starting Agents gRPC server on port 50053...
-✅ Agents gRPC server started on port 50053
-```
-
-## Использование
-
-### Архитектура потока данных
+## 🏗️ Архитектура
 
 ```
-User Request (WebSocket)
-    ↓
-API Gateway (3111)
-    ↓
-Boss Service (50051) ──gRPC──┐
-                              ├──→ Agents Service (50053)
-Manager Service (50052) ──gRPC┤
-                              └─→ AI Providers (Claude, OpenAi, etc.)
-Worker Service (internal) ──gRPC┘
+Boss/Manager/Worker → gRPC → Agents Service → Provider SDK → LLM API
+                            (Python)
 ```
 
-### Ключевой момент: API ключи в запросе
+### Поддерживаемые провайдеры
 
-**API ключи НЕ загружаются из environment переменных**. Вместо этого:
+| Провайдер | SDK | Модель по умолчанию | Извлечение ключа |
+|-----------|-----|---------------------|------------------|
+| **OpenRouter** | `openai` (совместимый) | `qwen/qwen3.6-plus:free` | `openrouter`, `api_key`, `apiKey` |
+| **Gemini** | `google-genai` | `gemini-2.5-flash` | `gemini`, `google` |
+| **OpenAI** | `openai` | `gpt-4o` | `openai`, `api_key` |
+| **Claude** | `anthropic` | `claude-opus-4-6` | `claude`, `anthropic` |
+| **DeepSeek** | `openai` (совместимый) | `deepseek-chat` | `deepseek`, `api_key` |
+| **Grok** | `openai` (совместимый) | `grok-3` | `grok`, `xai` |
 
-1. Пользователь отправляет запрос с API ключями в поле `tokens`:
+## 📁 Структура проекта
 
-```json
-{
-  "title": "Build API",
-  "description": "Create REST API with authentication",
-  "tokens": {
-    "claude": "sk-ant-...",
-    "openai": "sk-...",
-    "gemini": "AIza...",
-    "deepseek": "sk-...",
-    "grok": "sk-..."
-  },
-  "meta": {
-    "provider": "claude",
-    "model": "claude-opus-4-6"
-  }
-}
+```
+agents/
+├── app/
+│   ├── core/
+│   │   ├── models.py              # Pydantic модели и базовый класс провайдера
+│   │   ├── helpers.py             # Утилиты (извлечение API ключей)
+│   │   └── agent_service.py       # Роутер запросов к провайдерам
+│   ├── providers/
+│   │   ├── openrouter.py          # OpenRouter с retry-логикой
+│   │   ├── gemini.py              # Google Gemini
+│   │   ├── openai_provider.py     # OpenAI
+│   │   ├── claude.py              # Anthropic Claude
+│   │   ├── deepseek.py            # DeepSeek
+│   │   └── grok.py                # xAI Grok
+│   ├── grpc/
+│   │   ├── server.py              # gRPC сервер (AgentsGRPCServicer)
+│   │   └── client.py              # gRPC клиент для других сервисов
+│   └── proto/
+│       ├── agents.proto           # Proto-контракт
+│       ├── agents_pb2.py          # Сгенерированный код
+│       └── agents_pb2_grpc.py     # Сгенерированный gRPC код
+├── main.py                        # Точка входа
+├── requirements.txt               # Python зависимости
+├── Dockerfile                     # Docker образ
+├── .env.example                   # Пример переменных окружения
+└── README.md                      # Этот файл
 ```
 
-2. Boss отправляет GenerateRequest в agents gRPC:
+## 🚀 Быстрый старт
 
-```go
-agentClient, _ := grpc.NewAgentClient("agents:50053")
-result, _ := agentClient.Generate(
-    ctx,
-    "claude",              // provider
-    "claude-opus-4-6",     // model
-    "Your prompt",         // prompt
-    tokens,                // tokens from request (contains API key)
-    4096,                  // maxTokens
-    0.7,                   // temperature
-)
-```
-
-3. Agents сервис использует API ключ из tokens для вызова провайдера
-
-## Использование из Boss/Manager/Worker
-
-### Boss Service
-
-```go
-import "agents/pkg/fetcher/grpc"
-
-// Create client wrapper
-agentsClient, _ := NewAgentClientWrapper()
-defer agentsClient.Close()
-
-// Generate content
-result, _ := agentsClient.GenerateFromTask(
-    ctx,
-    "claude",           // provider
-    "claude-opus-4-6",  // model
-    "Your prompt",      // prompt
-    req.Tokens,         // tokens from user request
-)
-```
-
-### Manager Service
-
-```go
-agentClient, _ := grpc.NewAgentClient("agents:50053")
-content, _ := agentClient.Generate(
-    ctx,
-    "openai",
-    "gpt-4-mini",
-    prompt,
-    tokens,  // от пользовательского запроса
-    2048,
-    0.7,
-)
-```
-
-## Docker Deployment
-
-### Build & Run
+### 1. Установка зависимостей
 
 ```bash
-# From project root
-docker-compose up -d --build
-
-# Logs
-docker-compose logs -f agents
+pip install -r requirements.txt
 ```
 
-### Services Ports
+### 2. Генерация gRPC кода (если изменили proto)
 
-```
-API Gateway:    3111   (WebSocket)
-Boss gRPC:      50051
-Manager gRPC:   50052
-Agents gRPC:    50053
-Postgres:       5432
+```bash
+python -m grpc_tools.protoc -I app/proto --python_out=app/proto --grpc_python_out=app/proto app/proto/agents.proto
 ```
 
-## Troubleshooting
+### 3. Запуск сервиса
 
-### Proto compilation fails
+```bash
+# С настройками по умолчанию
+python main.py
 
-```powershell
-# Verify protoc installed
-protoc --version
-
-# Verify plugins installed
-Get-Command protoc-gen-go
-Get-Command protoc-gen-go-grpc
-
-# If missing, install:
-go install github.com/golang/protobuf/protoc-gen-go@latest
-go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+# Или с переменными окружения
+export AGENTS_PORT=50053
+python main.py
 ```
 
-### Connection refused
+### 4. Использование Docker
 
-- Ensure agents service is running: `docker-compose logs agents`
-- Ensure other services can reach agents on `agents:50053`
-- Check `AGENTS_SERVICE_HOST` environment variable
+```bash
+docker build -t crewai-agents .
+docker run -p 50053:50053 --env-file .env crewai-agents
+```
 
-### Invalid API Key
+## 🔌 Использование из других сервисов
 
-- Verify API key is correct and has permissions
-- Check model name is available for API tier
-- Review provider's rate limits and quotas
+### Python клиент
 
-## Architecture Details
+```python
+from app.grpc.client import AgentsClient
 
-### Provider Interface
+client = AgentsClient(host="localhost", port=50053)
 
-All providers implement:
+response = await client.generate(
+    provider="openrouter",
+    model="qwen/qwen3.6-plus:free",
+    prompt="Напиши функцию для сортировки массива",
+    tokens={"openrouter": "sk-or-v1-..."},
+    max_tokens=2048,
+    temperature=0.7,
+)
 
-```go
-type AIProvider interface {
-    Generate(ctx context.Context, req *AgentRequest) (*AgentResponse, error)
-    Name() string
-    IsConfigured() bool
+print(response.content)
+await client.close()
+```
+
+### Streaming
+
+```python
+async for chunk in client.generate_stream(
+    provider="gemini",
+    model="gemini-2.5-flash",
+    prompt="Расскажи о Python",
+    tokens={"gemini": "AIza..."},
+):
+    if chunk.done:
+        break
+    print(chunk.content, end="")
+```
+
+## 📋 Proto-контракт
+
+```protobuf
+service AgentService {
+  rpc Generate(GenerateRequest) returns (GenerateResponse) {}
+  rpc GenerateStream(GenerateRequest) returns (stream GenerateStreamChunk) {}
+}
+
+message GenerateRequest {
+  string provider = 1;           // openrouter, gemini, openai, claude, deepseek, grok
+  string model = 2;              // модель
+  string prompt = 3;             // текст промпта
+  map<string, string> tokens = 4; // API-ключи per-request
+  int32 max_tokens = 5;
+  float temperature = 6;
+}
+
+message GenerateResponse {
+  string provider = 1;
+  string model = 2;
+  string content = 3;
+  int32 tokens_used = 4;
+  string error = 5;
+  string error_code = 6;
 }
 ```
 
-### Model Selection Priority
+## 🔑 Per-request токены
 
-1. User-provided model from `req.Meta["model"]` ← **Highest priority**
-2. Environment variable `{PROVIDER}_MODEL`
-3. Provider's hardcoded default ← **Lowest priority**
+Все провайдеры принимают API-ключ **в каждом запросе** через поле `tokens`, а не при инициализации:
 
-### Request Flow Example
-
-```
-WebSocket /task/create
-    ↓
-APIGateway extracts provider/model from meta
-    ↓
-Boss creates GenerateRequest with:
-  - provider from meta
-  - model from meta
-  - prompt (task description)
-  - tokens (from user)
-    ↓
-Boss calls agents gRPC Generate()
-    ↓
-Agents routes to Claude/OpenAI/etc.
-    ↓
-Provider uses token from request to call API
-    ↓
-Return response back to Boss
+```python
+tokens = {
+    "openrouter": "sk-or-v1-...",  # для OpenRouter
+    "gemini": "AIza...",            # для Gemini
+    "openai": "sk-...",             # для OpenAI
+    "claude": "sk-ant-...",         # для Claude
+    "deepseek": "sk-...",           # для DeepSeek
+    "grok": "xai-...",              # для Grok
+}
 ```
 
-## Performance
+Это позволяет:
+- ✅ Не хранить API-ключи на сервере
+- ✅ Переключать пользователей с разными ключами
+- ✅ Безопасно работать в multi-tenant среде
 
-- **Max message size**: 100 MB (configurable)
-- **Concurrent requests**: Limited by provider API rate limits
-- **Default timeout**: Standard gRPC timeout
+## 🔄 Retry-логика (OpenRouter)
 
-## Monitoring
+OpenRouter провайдер имеет встроенную retry-логику для transient-ошибков:
 
-All calls are logged with:
-- Provider name
-- Model used
-- Request timestamp
-- Response time
-- Errors
-
-Example logs:
-```
-🤖 Calling agents service (provider=claude, model=claude-opus-4-6)
-✅ Connection to Agents service at agents:50053
+```python
+MAX_RETRIES = 3
+# Retry при: EOF, connection reset, timeout, 502, 503, 504
+# НЕ retry при: auth error, rate limit, invalid request
 ```
 
-## License
+## ➕ Добавление нового провайдера
 
-Part of CrewAI microservices architecture
+1. Создайте файл: `app/providers/newprovider.py`
+
+```python
+from app.core.models import BaseAIProvider, ProviderConfig
+
+class NewProvider(BaseAIProvider):
+    def __init__(self, config: ProviderConfig):
+        super().__init__(config)
+    
+    async def generate(self, prompt, tokens, max_tokens, temperature):
+        # Реализация
+        pass
+    
+    def name(self):
+        return "newprovider"
+```
+
+2. Зарегистрируйте в `main.py`:
+
+```python
+from app.providers.newprovider import NewProvider
+
+newprovider = NewProvider(providers_config["newprovider"])
+agent_service.register_provider("newprovider", newprovider)
+```
+
+## 🐛 Логирование
+
+Логи пишутся в:
+- **stderr** — уровень INFO+
+- **logs/agents_YYYY-MM-DD.log** — уровень DEBUG+ с ротацией
+
+## 🐳 Docker Compose
+
+В корневом `docker-compose.yml`:
+
+```yaml
+services:
+  agents:
+    build: ./agents
+    ports:
+      - "50053:50053"
+    env_file:
+      - .env
+    restart: unless-stopped
+```
+
+## 📝 Лицензия
+
+MIT

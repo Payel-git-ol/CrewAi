@@ -1,6 +1,6 @@
 module worker
 
-go 1.25.4
+go 1.25
 
 require (
 	github.com/Payel-git-ol/azure/env v0.0.0-20260323131844-c3f97980771f

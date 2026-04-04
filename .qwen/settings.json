@@ -21,7 +21,25 @@
       "Bash(%path%)",
       "Bash(move *)",
       "Bash(\"c:\\users\\pasaz\\appdata\\local\\microsoft\\winget\\packages\\google.protobuf_microsoft.winget.source_8wekyb3d8bbwe\\bin\\protoc.exe\" *)",
-      "Bash(cd *)"
+      "Bash(cd *)",
+      "Bash(rd *)",
+      "Bash(python *)",
+      "Bash(pip install *)",
+      "Bash(copy *)",
+      "Bash(docker rmi *)",
+      "Bash(replace *)",
+      "Bash(set-content *)",
+      "Bash(docker ps *)",
+      "Bash(docker logs *)",
+      "Bash(docker restart *)",
+      "Bash(timeout *)",
+      "Bash(docker build *)",
+      "Bash(docker run *)",
+      "Bash(docker stop *)",
+      "Bash(docker rm *)",
+      "Bash(start *)",
+      "Bash(git checkout *)",
+      "Bash(git add *)"
     ]
   },
   "$version": 3

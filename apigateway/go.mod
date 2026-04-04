@@ -1,6 +1,6 @@
 module apigateway
 
-go 1.25.4
+go 1.25
 
 require (
 	github.com/Payel-git-ol/azure v1.1.1-0.20260402140953-106355222853

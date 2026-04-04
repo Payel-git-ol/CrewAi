@@ -1,4 +1,4 @@
-package service
+package agents
 
 import (
 	"context"
@@ -22,7 +22,7 @@ func NewAgentClientWrapper() (*AgentClientWrapper, error) {
 		agentsHost = "agents:50053"
 	}
 
-	log.Printf("🔗 Connecting to Agents service at %s...", agentsHost)
+	log.Printf("🔗 [Manager] Connecting to Agents service at %s...", agentsHost)
 
 	conn, err := grpc.Dial(
 		agentsHost,
@@ -36,14 +36,14 @@ func NewAgentClientWrapper() (*AgentClientWrapper, error) {
 		return nil, fmt.Errorf("failed to connect to agents service: %w", err)
 	}
 
-	log.Printf("✅ Connected to Agents service at %s", agentsHost)
+	log.Printf("✅ [Manager] Connected to Agents service at %s", agentsHost)
 
 	return &AgentClientWrapper{conn: conn}, nil
 }
 
 // Generate calls the Agents service to generate content via gRPC
-func (w *AgentClientWrapper) Generate(ctx context.Context, provider, model, prompt string, tokens map[string]string) (string, error) {
-	log.Printf("🤖 Calling Agents service (provider=%s, model=%s) via gRPC", provider, model)
+func (w *AgentClientWrapper) Generate(ctx context.Context, provider, model, prompt string, tokens map[string]string, maxTokens int, temperature float64) (string, error) {
+	log.Printf("🤖 [Manager] Calling Agents service (provider=%s, model=%s) via gRPC", provider, model)
 
 	// TODO: Implement actual gRPC call once proto stubs are generated
 	// See: AGENTS_MIGRATION_STATUS.md for instructions
@@ -51,15 +51,10 @@ func (w *AgentClientWrapper) Generate(ctx context.Context, provider, model, prom
 	return "", fmt.Errorf("Agents gRPC client stubs not yet generated. See AGENTS_MIGRATION_STATUS.md")
 }
 
-// GenerateFromTask calls the Agents service to generate content via gRPC (alias for Generate)
-func (w *AgentClientWrapper) GenerateFromTask(ctx context.Context, provider, model, prompt string, tokens map[string]string) (string, error) {
-	return w.Generate(ctx, provider, model, prompt, tokens)
-}
-
 // Close closes the gRPC connection
 func (w *AgentClientWrapper) Close() error {
 	if w.conn != nil {
-		log.Printf("🔌 Closing connection to Agents service")
+		log.Printf("🔌 [Manager] Closing connection to Agents service")
 		return w.conn.Close()
 	}
 	return nil

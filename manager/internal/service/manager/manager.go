@@ -4,16 +4,15 @@ import (
 	"log"
 	"manager/internal/fetcher/grpc/managerpb"
 	"manager/internal/fetcher/grpc/worker"
+	"manager/internal/service/agents"
 	"os"
-
-	"agents/pkg/fetcher/grpc"
 )
 
 // ManagerService — сервис менеджеров
 type ManagerService struct {
 	managerpb.UnimplementedManagerServiceServer
 	workerClient *worker.Client
-	agentsClient *grpc.AgentClient
+	agentsClient *agents.AgentClientWrapper
 }
 
 func NewManagerService() *ManagerService {
@@ -26,7 +25,7 @@ func NewManagerService() *ManagerService {
 	if agentsHost == "" {
 		agentsHost = "localhost:50053"
 	}
-	aClient, err := grpc.NewAgentClient(agentsHost)
+	aClient, err := agents.NewAgentClientWrapper()
 	if err != nil {
 		log.Printf("Warning: failed to connect to agents service: %v", err)
 	}

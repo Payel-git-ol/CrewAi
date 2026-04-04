@@ -1,16 +1,25 @@
-﻿$env:Path = "C:\Users\pasaz\go\bin;" + $env:Path
-$env:Path = "C:\Users\pasaz\AppData\Local\Microsoft\WinGet\Packages\Google.Protobuf_Microsoft.Winget.Source_8wekyb3d8bbwe\bin;" + $env:Path
+﻿# PowerShell script to generate Go gRPC code from proto file
 
-cd C:\Users\pasaz\GolandProjects\crewai\boss
+$PROTO_PATH = "proto/agents.proto"
+$OUTPUT_DIR = "proto/pb"
 
-# Delete old files
-del internal\fetcher\grpc\bosspb\*.pb.go 2>$null
-del *.pb.go 2>$null
+Write-Host "🔨 Generating Go gRPC code from $PROTO_PATH..." -ForegroundColor Cyan
 
-# Generate
-protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative --proto_path=proto proto/gateway-boss.proto
+# Check if protoc is installed
+if (-not (Get-Command protoc -ErrorAction SilentlyContinue)) {
+    Write-Host "❌ protoc not found. Please install:" -ForegroundColor Red
+    Write-Host "   1. protoc: https://github.com/protocolbuffers/protobuf/releases"
+    Write-Host "   2. protoc-gen-go: go install google.golang.org/protobuf/cmd/protoc-gen-go@latest"
+    Write-Host "   3. protoc-gen-go-grpc: go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest"
+    exit 1
+}
 
-# Move to folder
-move *.pb.go internal\fetcher\grpc\bosspb\ 2>$null
+# Generate code
+protoc -I proto --go_out=$OUTPUT_DIR --go-grpc_out=$OUTPUT_DIR $PROTO_PATH
 
-Write-Host "Proto generated for boss!"
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "✅ Go gRPC code generated successfully!" -ForegroundColor Green
+} else {
+    Write-Host "❌ Failed to generate Go gRPC code" -ForegroundColor Red
+    exit 1
+}

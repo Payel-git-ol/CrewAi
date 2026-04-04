@@ -1,34 +1,39 @@
-FROM golang:1.25-alpine AS builder
+FROM python:3.12-slim
 
-WORKDIR /workspace
+WORKDIR /app
 
-RUN apk add --no-cache git
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
 
-# Копируем все модули и go.work
-COPY go.work ./
-COPY agents ./agents
-COPY apigateway ./apigateway
-COPY boss ./boss
-COPY manager ./manager
-COPY merger ./merger
-COPY worker ./worker
+# Copy requirements first for better caching
+COPY requirements.txt .
 
-# Скачиваем зависимости для agents
-RUN cd agents && go mod download
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Собираем binary
-RUN cd agents && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /workspace/main ./cmd/app
+# Copy application code
+COPY . .
 
-# Финальный образ
-FROM alpine:latest
+# Create logs directory
+RUN mkdir -p logs
 
-WORKDIR /root/
+# Expose gRPC port
+EXPOSE 50053
 
-# Устанавливаем ca-certificates для HTTPS
-RUN apk --no-cache add ca-certificates
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "
+import grpc
+try:
+    channel = grpc.insecure_channel('localhost:50053')
+    channel.subscribe(lambda state: None, try_to_connect=True)
+    print('healthy')
+except:
+    exit(1)
+"
 
-# Копируем бинарник
-COPY --from=builder /workspace/main .
-
-# Запускаем
-CMD ["./main"]
+# Run the service
+CMD ["python", "main.py"]
